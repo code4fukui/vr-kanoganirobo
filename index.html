@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<script type="module">
+import { cr, rgb, asset } from "https://js.sabae.cc/aframe.js";
+import { rnd } from "https://js.sabae.cc/rnd.js";
+
+const scene = cr("a-scene", document.body);
+for (let i = 0; i < 100; i++) {
+  const box = cr("a-box", scene);
+  const x = (1.5 + rnd(20) / 10) * (rnd(2) ? 1 : -1);
+  const z = (1.5 + rnd(20) / 10) * (rnd(2) ? 1 : -1);
+  const y = .5 + rnd(10) / 10;
+  box.setAttribute("position", { x, y, z });
+  const n = rnd(5) * .1;
+  box.setAttribute("scale", { x: n, y: n, z: n });
+  box.setAttribute("color", rgb(rnd(256), rnd(256), rnd(256)));
+}
+
+const aid = asset("./kanokani-robo.glb");
+const obj = cr("a-entity", scene);
+obj.setAttribute("gltf-model", aid);
+const scale = 10;
+obj.setAttribute("scale", { x: scale, y: scale, z: scale });
+obj.setAttribute("position", { x: 0, y: 0, z: -1.5 });
+</script>
