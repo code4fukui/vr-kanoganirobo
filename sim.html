@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<script type="module">
+import { cr, rgb, asset } from "https://js.sabae.cc/aframe.js";
+import { rnd } from "https://js.sabae.cc/rnd.js";
+
+const scene = cr("a-scene", document.body);
+
+if (location.hash != "#nosky") {
+  const sky = cr("a-sky", scene);
+  sky.setAttribute("src", "./kanouganirobo-photo360.jpg");
+  //sky.setAttribute("rotation", { x: 0, y: -110, z: 0 });
+  sky.setAttribute("rotation", { x: 0, y: 0, z: 0 });
+}
+
+const aid = asset("./kanouganirobo-stage.glb");
+const obj = cr("a-entity", scene);
+obj.setAttribute("gltf-model", aid);
+obj.setAttribute("position", { x: 0, y: 0, z: -3 });
+//const scale = 10;
+//obj.setAttribute("scale", { x: scale, y: scale, z: scale });
+
+const robosdata = ["kanouganirobo-kanidaisuki.glb", "kanouganirobo-kaninoyaiba.glb"];
+const robos = [];
+for (let i = 0; i < robosdata.length; i++) {
+  const robo = robosdata[i];
+  const aid = asset(robo);
+  const obj = cr("a-entity", scene);
+  obj.setAttribute("gltf-model", aid);
+  obj.setAttribute("position", { x: (i - .5) * 1.5, y: .8, z: -1.3 });
+  robos.push(obj);
+}
+
+let state = 0;
+let lastt = performance.now();
+let t = 0;
+setInterval(() => {
+  const nowt = performance.now();
+  const dt = nowt - lastt;
+  lastt = nowt;
+  t += dt;
+  if (state == 0) {
+    robos.forEach(r => r.setAttribute("rotation", { x: 0, y: t * 180 / 3000, z: 0 }));
+    if (t > 3000) {
+      state = 1;
+      t = 0;
+    }
+  } else if (state == 1) {
+    robos.forEach(r => {
+      const p = r.getAttribute("position");
+      p.z = -1.3 - t * 3 / 5000;
+      r.setAttribute("position", p);
+    });
+    if (t > 5000) {
+      state = 2;
+      t = 0;
+    }
+  } else if (state == 2) {
+    robos.forEach(r => r.setAttribute("rotation", { x: 0, y: 180 - t * 180 / 3000, z: 0 }));
+    if (t > 3000) {
+      state = 3;
+      t = 0;
+    }
+  } else if (state == 3) {
+    robos.forEach(r => {
+      const p = r.getAttribute("position");
+      p.z = -4.3 + t * 3 / 5000;
+      r.setAttribute("position", p);
+    });
+    if (t > 5000) {
+      state = 0;
+      t = 0;
+    }
+  }
+}, 1000 / 60);
+
+</script>
