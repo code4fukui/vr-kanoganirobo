@@ -41,8 +41,8 @@ setInterval(() => {
   if (state == 0) {
     robos.forEach(r => r.setAttribute("rotation", { x: 0, y: t * 180 / 3000, z: 0 }));
     if (t > 3000) {
-      state = 1;
-      t = 0;
+      //state = 1;
+      //t = 0;
     }
   } else if (state == 1) {
     robos.forEach(r => {
